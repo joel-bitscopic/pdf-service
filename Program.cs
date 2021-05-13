@@ -1,0 +1,115 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text.Json;
+using Adobe.DocumentServices.PDFTools.options.documentmerge;
+using TemplatedReportGenerator.Model;
+using TemplatedReportGenerator.ReportModel;
+
+namespace TemplatedReportGenerator
+{
+    class Program
+    {
+        static HIVINResistanceReportModel GenerateFakeHCVINModel() {
+            var encodedHeaderImage = ReportID.HIVINResistance.GetReportHeaderImage();
+
+            var patientModel = new PatientModel("Max");
+            patientModel.DateOfBirth = new DateTime(1991, 7, 17);
+            patientModel.CollectionDate = new DateTime(2021, 5, 5, 10, 30, 0);
+            patientModel.SiteAccessionNumber = "PALO 17 2526";
+            patientModel.SocialSecurityNumber = "xxx-xx-xxxx";
+            patientModel.OrderingSite = "MA";
+            patientModel.OrderingPhysician = "Dr. Phil";
+            patientModel.PHLRAccessionNumber = "P15-0133";
+
+            var hcvTestModel = new HIVINResistanceTestModel();
+            hcvTestModel.TestPerformed = "HIV-1 Integrase (IN) Resistance Genotype"; //TODO should this be static for HCVResistanceTestModels?
+            hcvTestModel.TestDate = new DateTime(2014, 12, 22);
+            hcvTestModel.ReceivedDate = new DateTime(2014, 12, 22, 13, 15, 0);
+            hcvTestModel.SampleType = "plasma"; //TODO should this come from a enum or domain?
+            hcvTestModel.ReportDate = new DateTime(2014, 12, 29, 9, 7, 0);
+            hcvTestModel.ReferenceRange = "susceptible"; //TODO should this come from a enum or domain?
+
+            var resultsModel = new InhibitorResistanceResultsModel<InhibitorResistanceStandardModel>("Integrase Strand Transfer Inhibitor Resistance Interpretation"); //TODO should this name be a constant somewhere?
+            resultsModel.Results.Add(new InhibitorResistanceStandardModel("dolutegravir (DTG) -- Tivicay®", "Susceptible"));
+            resultsModel.Results.Add(new InhibitorResistanceStandardModel("elvitegravir (EVG) --  Stribild®", "Susceptible"));
+            resultsModel.Results.Add(new InhibitorResistanceStandardModel("raltegravir (RAL) -- Isentress®", "Susceptible"));
+
+            var reportModel = new HIVINResistanceReportModel(encodedHeaderImage, patientModel, hcvTestModel, resultsModel);
+            reportModel.IntegraseHIVSubtype = "B";
+            reportModel.IntegraseCodonsAnalyzed = "1-288";
+            reportModel.IntegraseMajorResistanceDetected = "None";
+            reportModel.IntegraseAccessoryResistanceDetected = "None";
+            reportModel.OtherAminoAcidChanges = "S17N, R20K, A23V, G59E, L101I, T206S, S230N, D256E";
+
+            reportModel.SuperscriptAContent = "The test uses RT-PCR and population-based sequencing to determine the consensus nucleotide and resulting amino acid sequence of the 289 codons of the HIV-1 integrase gene (Varghese et al., AIDS Res Human Retro 26(12):1323-1326).  This test was developed and its performance characteristics determined by PHRL. The FDA has not approved or cleared this test; however, FDA clearance or approval is not currently required for clinical use. The results are not intended to be used as the sole means for clinical diagnosis or patient management decisions.";
+            reportModel.SuperscriptBContent = "Classification of resistance-associated mutations and integrase drug resistance interpretation provided by the Stanford HIV Resistance Database version 8.3 (hivdb.stanford.edu).";
+
+            reportModel.Footer = "Mark Holodniy, MD, FACP, Director, VHA Public Health Reference Laboratory, Veterans Affairs Palo Alto Health Care System, 3801 Miranda Avenue, Palo Alto, CA 94304,  V21PHRL@va.gov CLIA #05D2125891";
+
+            return reportModel;
+        }
+
+        static PHRLChargebackInvoiceReportModel GenerateFakePHRLInvoiceModel() {
+            var headerImage = ReportID.PHRLChargebackInvoice.GetReportHeaderImage();
+            
+            var invoice1 = new PHRLInvoiceModel();
+            invoice1.PHRLNumber = "P16-7117";
+            invoice1.Description = "Zika Virus IgM";
+            invoice1.CPTCode = "86790";
+            invoice1.Price = 50;
+            invoice1.DateReceived = new DateTime(2016, 11, 1);
+            invoice1.SiteSpecimenNumber = "SREF 16 4841";
+
+            var invoice2 = new PHRLInvoiceModel();
+            invoice2.PHRLNumber = "P16-7124";
+            invoice2.Description = "Zika Virus Trioplex";
+            invoice2.CPTCode = "87798";
+            invoice2.Price = 90;
+            invoice2.DateReceived = new DateTime(2016, 11, 1);
+            invoice2.SiteSpecimenNumber = "SREF 16 4852";
+
+            var invoices = new List<PHRLInvoiceModel>();
+            for (int i = 0; i < 10; i++) {
+                invoices.Add(invoice1);
+                invoices.Add(invoice2);
+            }
+
+            var reportModel = new PHRLChargebackInvoiceReportModel(headerImage, invoices);
+            reportModel.Site = "672";
+            reportModel.Date = new DateTime(2017, 1, 17);
+            reportModel.Attention = "email1@fake-email.com, email2@fake-email.com, email3@fake-email.com";
+            reportModel.Total = 27940;
+
+            return reportModel;
+        }
+        
+        static void GenerateFakeHCVINReport() {
+            var reportModel = GenerateFakeHCVINModel();
+            //Console.WriteLine(JsonSerializer.Serialize(reportModel));
+
+            var outputFormat = OutputFormat.DOCX;
+            var pdfResult = TemplatedReportGenerator.GenerateReport(reportModel, outputFormat);
+
+            pdfResult.SaveAs(Directory.GetCurrentDirectory() + "/output/" + TemplatedReportGenerator.GetReportDefaultFilename(reportModel.ReportID, outputFormat));
+        }
+        static void GenerateFakeFakePHRLInvoiceReport() {
+            var reportModel = GenerateFakePHRLInvoiceModel();
+            //Console.WriteLine(JsonSerializer.Serialize(reportModel));
+
+            var outputFormat = OutputFormat.PDF;
+            var pdfResult = TemplatedReportGenerator.GenerateReport(reportModel, outputFormat);
+
+            pdfResult.SaveAs(Directory.GetCurrentDirectory() + "/output/" + TemplatedReportGenerator.GetReportDefaultFilename(reportModel.ReportID, outputFormat));
+        }
+
+        static void Main(string[] args)
+        {
+            GenerateFakeHCVINReport();
+            //GenerateFakeFakePHRLInvoiceReport();
+        }
+    }
+}
+
+//TODOs
+//dig into performance - https://community.adobe.com/t5/document-services-apis/adobe-document-services-performance-issues/m-p/12030323/thread-id/1768
