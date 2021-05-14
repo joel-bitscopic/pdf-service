@@ -6,6 +6,7 @@ namespace TemplatedReportGenerator.ReportModel {
         HIVINResistance,
         HCVResistance,
         HIVPRRTResistance,
-        PHRLChargebackInvoice
+        PHRLChargebackInvoice,
+        COVIDSequencing2B
     }
 }

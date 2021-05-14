@@ -1,5 +1,3 @@
-using System;
-
 namespace TemplatedReportGenerator.Model
 {
     public class HIVINResistanceTestModel : ResistanceTestModel {

@@ -32,7 +32,7 @@ namespace TemplatedReportGenerator
         }
 
         ///<summary>
-        ///Generate a PDF report from a supported model. The template used will be inferred by the model's type.
+        ///Generate a PDF report from a supported model. The template used will be inferred by the model's ReportID property.
         ///</summary>
         ///<returns>
         ///A FileRef representing the report. This points to a file in the OS's default temporary folder (such as Window's roaming). This FileRef can be saved to a specific location or turned into a bytestream.
@@ -43,9 +43,8 @@ namespace TemplatedReportGenerator
         public static FileRef GenerateReport<T>(T model) {
             return GenerateReport(model, OutputFormat.PDF);
         }
-
         ///<summary>
-        ///Generate a PDF or MSWord report from a supported model. The template used will be inferred by the model's type.
+        ///Generate a PDF or MSWord report from a supported model. The template used will be inferred by the model's ReportID property.
         ///</summary>
         ///<returns>
         ///A FileRef representing the report. This points to a file in the OS's default temporary folder (such as Window's roaming). This FileRef can be saved to a specific location or turned into a bytestream.
