@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+
 using Newtonsoft.Json.Linq;
 
 using Adobe.DocumentServices.PDFTools;
@@ -40,7 +41,19 @@ namespace TemplatedReportGenerator
             if (isNumeric)
                 return (ReportID)intReportID;
             else
-                return strReportID.GetReportIDFromReportName();
+                return StaticReportMetadata.GetReportIDFromReportName(strReportID);
+        }
+        public static OutputFormat ConvertReportOutputFormat(JObject jsonModel) {
+            if (jsonModel.ContainsKey("OutputFormat")) {
+                string strOutputFormat = ((JToken)jsonModel["OutputFormat"]).Value<string>();
+
+                if (strOutputFormat.Trim().Equals("docx", StringComparison.InvariantCultureIgnoreCase))
+                    return OutputFormat.DOCX;
+                else
+                    return OutputFormat.PDF;
+            }
+            else
+                return OutputFormat.PDF;
         }
 
         ///<summary>
@@ -52,7 +65,7 @@ namespace TemplatedReportGenerator
         ///<exception cref="System.NotSupportedException">Thrown when model is of an unsupported type.</exception>
         ///<exception cref="Adobe.DocumentServices.PDFTools.exception.ServiceApiException">Thrown when the API key is invalid. The API key for this toolkit expires yearly and needs to be refreshed on that basis.</exception>
         ///<param name="model">A data transfer model representing all information needed by the corresponding templated report. Only models from the TemplatedReportGenerator.ReportModel namespace are supported, other models will throw an exception.</param>
-        public static FileRef GenerateReport<T>(T model) {
+        public static FileRef GenerateReport<T>(T model) where T : ReportBaseModel {
             return GenerateReport(model, OutputFormat.PDF);
         }
         ///<summary>
@@ -65,14 +78,16 @@ namespace TemplatedReportGenerator
         ///<exception cref="Adobe.DocumentServices.PDFTools.exception.ServiceApiException">Thrown when the API key is invalid. The API key for this toolkit expires yearly and needs to be refreshed on that basis.</exception>
         ///<param name="model">A data transfer model representing all information needed by the corresponding templated report. Only models from the TemplatedReportGenerator.ReportModel namespace are supported, other models will throw an exception.</param>
         ///<param name="outputFormat">The output format of the generated report. Adobe's generation toolkit supports both PDF and DOCX</param>
-        public static FileRef GenerateReport<T>(T model, OutputFormat outputFormat) {
+        public static FileRef GenerateReport<T>(T model, OutputFormat outputFormat) where T : ReportBaseModel {
             JObject jsonModel = JObject.FromObject(model);
 
             return GenerateReport(jsonModel, outputFormat);
         }
     
         public static FileRef GenerateReport(JObject jsonModel) {
-            return GenerateReport(jsonModel, OutputFormat.PDF);
+            OutputFormat outputFormat = ConvertReportOutputFormat(jsonModel);
+
+            return GenerateReport(jsonModel, outputFormat);
         }
         public static FileRef GenerateReport(JObject jsonModel, OutputFormat outputFormat) {
             ReportID reportID = ConvertReportID(jsonModel);

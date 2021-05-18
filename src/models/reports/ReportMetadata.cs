@@ -37,7 +37,7 @@ namespace TemplatedReportGenerator.ReportModel {
         public static EncodedImage GetReportHeaderImage(this ReportID reportID) {
             return StaticReportMetadata.ReportMetadata[reportID].HeaderImage;
         }
-        public static ReportID GetReportIDFromReportName(this string reportName) {
+        public static ReportID GetReportIDFromReportName(string reportName) {
             foreach (KeyValuePair<ReportID, ReportMetadata> reportTypePair in StaticReportMetadata.ReportMetadata) {
                 if (reportTypePair.Value.Name == reportName)
                     return reportTypePair.Key;
@@ -52,7 +52,7 @@ namespace TemplatedReportGenerator.ReportModel {
             StaticReportMetadata._ReportMetadata.Add(ReportID.HIVINResistance, new ReportMetadata(
                 @"HIVINResistance", 
                 @"HIV IN Resistance Report", 
-                @"reports/HIVINResistance/HIV IN Resistance Template.docx",
+                @"resources/HIV IN Resistance Template.docx",
                 new EncodedImage(
                     ReportImageMetadata.VETERAN_AFFAIR_HEADER_IMAGE,
                     "U.S. Department of Veteran Affairs"
@@ -63,7 +63,7 @@ namespace TemplatedReportGenerator.ReportModel {
             StaticReportMetadata._ReportMetadata.Add(ReportID.PHRLChargebackInvoice, new ReportMetadata(
                 @"PHRLChargebackInvoice", 
                 @"PHRL Chargeback Invoice", 
-                @"reports/PHRLChargebackInvoice/PHRL Chargeback Invoice Template.docx",
+                @"resources/PHRL Chargeback Invoice Template.docx",
                 new EncodedImage(
                     ReportImageMetadata.PHRL_HEADER_IMAGE,
                     "Public Health Reference Library"
@@ -72,7 +72,7 @@ namespace TemplatedReportGenerator.ReportModel {
             StaticReportMetadata._ReportMetadata.Add(ReportID.COVIDSequencing2B, new ReportMetadata(
                 @"COVIDSequencing2B",
                 @"COVID19 sequencing report 2B",
-                @"reports/COVIDSequencing2B/COVID19 sequencing report 2B Template.docx",
+                @"resources/COVID19 sequencing report 2B Template.docx",
                 new EncodedImage(
                     ReportImageMetadata.VETERAN_AFFAIR_HEADER_IMAGE,
                     "U.S. Department of Veteran Affairs"
