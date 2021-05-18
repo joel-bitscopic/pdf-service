@@ -5,8 +5,6 @@ namespace TemplatedReportGenerator.Model
 
         public COVID19Sequencing2BPatientModel(string name) 
             : base(name)
-        {
-
-        }
+        { }
     }
 }

@@ -5,7 +5,6 @@ using System.Text.Json;
 using Adobe.DocumentServices.PDFTools.options.documentmerge;
 using TemplatedReportGenerator.Model;
 using TemplatedReportGenerator.ReportModel;
-
 namespace TemplatedReportGenerator
 {
     class Program

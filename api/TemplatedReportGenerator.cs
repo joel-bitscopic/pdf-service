@@ -16,9 +16,9 @@ namespace TemplatedReportGenerator
         public static string GetReportDefaultFilename(ReportID reportID, OutputFormat outputFormat) {
             string timeStamp = DateTime.Now.ToString("dd-MM-yy_hh-ss");
 
-            return reportID.GetReportDefaultFilename() + "_" + timeStamp + outputFormat.GetFileExtensionForOutputFormat();
+            return reportID.GetReportDefaultFilename() + "_" + timeStamp + GetFileExtensionForOutputFormat(outputFormat);
         }
-        public static string GetFileExtensionForOutputFormat(this OutputFormat outputFormat) {
+        public static string GetFileExtensionForOutputFormat(OutputFormat outputFormat) {
             if (outputFormat == OutputFormat.PDF)
                 return ".pdf";
             else if (outputFormat == OutputFormat.DOCX)
@@ -29,6 +29,18 @@ namespace TemplatedReportGenerator
 
         private static string GetCredentialFilePath() {
             return Directory.GetCurrentDirectory() + "/pdftools-api-credentials.json";
+        }
+
+        public static ReportID ConvertReportID(JObject jsonModel) {
+            //attempt to support passing integer ID associated with ReportID enum or string name associated with enum
+            string strReportID = ((JToken)jsonModel["ReportID"]).Value<string>();
+            int intReportID;
+            bool isNumeric = int.TryParse(strReportID, out intReportID);
+
+            if (isNumeric)
+                return (ReportID)intReportID;
+            else
+                return strReportID.GetReportIDFromReportName();
         }
 
         ///<summary>
@@ -63,16 +75,7 @@ namespace TemplatedReportGenerator
             return GenerateReport(jsonModel, OutputFormat.PDF);
         }
         public static FileRef GenerateReport(JObject jsonModel, OutputFormat outputFormat) {
-            string strReportID = ((JToken)jsonModel["ReportID"]).Value<string>();
-            int intReportID;
-            bool isNumeric = int.TryParse(strReportID, out intReportID);
-
-            ReportID reportID;
-            if (isNumeric)
-                reportID = (ReportID)intReportID;
-            else
-                reportID = strReportID.GetReportIDFromReportName();
-            
+            ReportID reportID = ConvertReportID(jsonModel);
             
             Credentials credentials = Credentials.ServiceAccountCredentialsBuilder()
                                         .FromFile(GetCredentialFilePath())
@@ -83,7 +86,7 @@ namespace TemplatedReportGenerator
             DocumentMergeOptions documentMergeOptions = new DocumentMergeOptions(jsonModel, outputFormat);
             
             DocumentMergeOperation documentMergeOperation = DocumentMergeOperation.CreateNew(documentMergeOptions);
-            string templateFilePath = StaticReportMetadata.ReportMetadata[reportID].Filepath;
+            string templateFilePath = StaticReportMetadata.GetReportFilepath(reportID);
             documentMergeOperation.SetInput(FileRef.CreateFromLocalFile(templateFilePath));
 
             FileRef result = documentMergeOperation.Execute(executionContext);
