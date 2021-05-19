@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 
 using Adobe.DocumentServices.PDFTools.options.documentmerge;
-
+using Newtonsoft.Json.Linq;
 using TemplatedReportGenerator.Model;
 using TemplatedReportGenerator.ReportModel;
 
@@ -132,10 +132,18 @@ namespace TemplatedReportGenerator.utils {
         public static void GenerateFakeReport(ReportBaseModel reportModel) {
             //Console.WriteLine(JsonSerializer.Serialize(reportModel));
 
-            var outputFormat = OutputFormat.PDF;
-            var pdfResult = TemplatedReportGenerator.GenerateReport(reportModel, outputFormat);
+            var pdfResult = TemplatedReportGenerator.GenerateReport(reportModel);
 
+            var outputFormat = TemplatedReportGenerator.ConvertReportOutputFormat(reportModel);
             pdfResult.SaveAs(Directory.GetCurrentDirectory() + "/output/" + TemplatedReportGenerator.GetReportDefaultFilename(reportModel.ReportID, outputFormat));
+        }
+        public static void GenerateFakeReportFromJObject(JObject jsonModel) {
+            var outputFormat = TemplatedReportGenerator.ConvertReportOutputFormat(jsonModel);
+            var reportID = TemplatedReportGenerator.ConvertReportID(jsonModel);
+
+            var pdfResult = TemplatedReportGenerator.GenerateReport(jsonModel);
+
+            pdfResult.SaveAs(Directory.GetCurrentDirectory() + "/output/" + TemplatedReportGenerator.GetReportDefaultFilename(reportID, outputFormat));
         }
     }
 }

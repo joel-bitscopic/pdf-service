@@ -6,12 +6,12 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v5.0": {
-      "PDFGenerator/1.0.0": {
+      "ReportCore/1.0.0": {
         "dependencies": {
           "Adobe.DocumentServices.PDFTools": "1.3.0"
         },
         "runtime": {
-          "PDFGenerator.dll": {}
+          "ReportCore.dll": {}
         }
       },
       "Adobe.DocumentServices.PDFTools/1.3.0": {
@@ -801,7 +801,7 @@
     }
   },
   "libraries": {
-    "PDFGenerator/1.0.0": {
+    "ReportCore/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
