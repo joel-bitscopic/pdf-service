@@ -11,9 +11,9 @@ namespace TemplatedReportGenerator
             PlaceholderReportUtilities.GenerateFakeReport(PlaceholderReportUtilities.GenerateFakePHRLInvoiceModel());
             PlaceholderReportUtilities.GenerateFakeReport(PlaceholderReportUtilities.GenerateFakeCOVID19SequencingModel());
             
-            PlaceholderReportUtilities.GenerateFakeReportFromJObject(JObject.FromObject(PlaceholderReportUtilities.GenerateFakeHCVINModel()));
-            PlaceholderReportUtilities.GenerateFakeReportFromJObject(JObject.FromObject(PlaceholderReportUtilities.GenerateFakePHRLInvoiceModel()));
-            PlaceholderReportUtilities.GenerateFakeReportFromJObject(JObject.FromObject(PlaceholderReportUtilities.GenerateFakeCOVID19SequencingModel()));
+            PlaceholderReportUtilities.GenerateFakeReport(JObject.FromObject(PlaceholderReportUtilities.GenerateFakeHCVINModel()));
+            PlaceholderReportUtilities.GenerateFakeReport(JObject.FromObject(PlaceholderReportUtilities.GenerateFakePHRLInvoiceModel()));
+            PlaceholderReportUtilities.GenerateFakeReport(JObject.FromObject(PlaceholderReportUtilities.GenerateFakeCOVID19SequencingModel()));
         }
     }
 }

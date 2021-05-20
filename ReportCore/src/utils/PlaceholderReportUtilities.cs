@@ -137,12 +137,11 @@ namespace TemplatedReportGenerator.utils {
             var outputFormat = TemplatedReportGenerator.ConvertReportOutputFormat(reportModel);
             pdfResult.SaveAs(Directory.GetCurrentDirectory() + "/output/" + TemplatedReportGenerator.GetReportDefaultFilename(reportModel.ReportID, outputFormat));
         }
-        public static void GenerateFakeReportFromJObject(JObject jsonModel) {
+        public static void GenerateFakeReport(JObject jsonModel) {
+            var pdfResult = TemplatedReportGenerator.GenerateReport(jsonModel);
+            
             var outputFormat = TemplatedReportGenerator.ConvertReportOutputFormat(jsonModel);
             var reportID = TemplatedReportGenerator.ConvertReportID(jsonModel);
-
-            var pdfResult = TemplatedReportGenerator.GenerateReport(jsonModel);
-
             pdfResult.SaveAs(Directory.GetCurrentDirectory() + "/output/" + TemplatedReportGenerator.GetReportDefaultFilename(reportID, outputFormat));
         }
     }

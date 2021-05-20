@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-
+using System.IO;
 using TemplatedReportGenerator.Model;
 
 namespace TemplatedReportGenerator.ReportModel {
@@ -8,17 +8,18 @@ namespace TemplatedReportGenerator.ReportModel {
     public class ReportMetadata {
         public string Name { get; set; }
         public string DefaultFilename { get; set; }
-        public string Filepath { get; set; }
+        public string TemplateFilename { get; set; }
         public EncodedImage HeaderImage { get; set;}
 
-        public ReportMetadata(string name, string defaultFilename, string filepath, EncodedImage headerImage) {
+        public ReportMetadata(string name, string defaultFilename, string templateFilename, EncodedImage headerImage) {
             this.Name = name;
             this.DefaultFilename = defaultFilename;
-            this.Filepath = filepath;
+            this.TemplateFilename = templateFilename;
             this.HeaderImage = headerImage;
         }
     }
     public static class StaticReportMetadata {
+        private const string TemplateDirectoryName = "resources";
         private static Dictionary<ReportID, ReportMetadata> _ReportMetadata { get; set; }
         public static IReadOnlyDictionary<ReportID, ReportMetadata> ReportMetadata 
         { 
@@ -28,8 +29,8 @@ namespace TemplatedReportGenerator.ReportModel {
             }
          }
         
-        public static string GetReportFilepath(this ReportID reportID) {
-            return StaticReportMetadata.ReportMetadata[reportID].Filepath;
+        public static string GetReportTemplateFilename(this ReportID reportID) {
+            return StaticReportMetadata.ReportMetadata[reportID].TemplateFilename;
         }
         public static string GetReportDefaultFilename(this ReportID reportID) {
             return StaticReportMetadata.ReportMetadata[reportID].DefaultFilename;
@@ -51,8 +52,8 @@ namespace TemplatedReportGenerator.ReportModel {
 
             StaticReportMetadata._ReportMetadata.Add(ReportID.HIVINResistance, new ReportMetadata(
                 @"HIVINResistance", 
-                @"HIV IN Resistance Report", 
-                @"resources/HIV IN Resistance Template.docx",
+                @"HIV IN Resistance Report",
+                @"HIV IN Resistance Template.docx",
                 new EncodedImage(
                     ReportImageMetadata.VETERAN_AFFAIR_HEADER_IMAGE,
                     "U.S. Department of Veteran Affairs"
@@ -63,7 +64,7 @@ namespace TemplatedReportGenerator.ReportModel {
             StaticReportMetadata._ReportMetadata.Add(ReportID.PHRLChargebackInvoice, new ReportMetadata(
                 @"PHRLChargebackInvoice", 
                 @"PHRL Chargeback Invoice", 
-                @"resources/PHRL Chargeback Invoice Template.docx",
+                @"PHRL Chargeback Invoice Template.docx",
                 new EncodedImage(
                     ReportImageMetadata.PHRL_HEADER_IMAGE,
                     "Public Health Reference Library"
@@ -72,7 +73,7 @@ namespace TemplatedReportGenerator.ReportModel {
             StaticReportMetadata._ReportMetadata.Add(ReportID.COVIDSequencing2B, new ReportMetadata(
                 @"COVIDSequencing2B",
                 @"COVID19 sequencing report 2B",
-                @"resources/COVID19 sequencing report 2B Template.docx",
+                @"COVID19 sequencing report 2B Template.docx",
                 new EncodedImage(
                     ReportImageMetadata.VETERAN_AFFAIR_HEADER_IMAGE,
                     "U.S. Department of Veteran Affairs"

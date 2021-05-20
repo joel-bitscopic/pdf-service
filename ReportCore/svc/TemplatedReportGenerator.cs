@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.IO;
 
 using Newtonsoft.Json.Linq;
@@ -10,15 +11,21 @@ using Adobe.DocumentServices.PDFTools.pdfops;
 using Adobe.DocumentServices.PDFTools.io;
 
 using TemplatedReportGenerator.ReportModel;
+using System.Reflection;
 
 namespace TemplatedReportGenerator
 {
     public static class TemplatedReportGenerator {
+        public const string TemplateDirectoryName = "resources";
+        public static string GetReportDefaultFilename(JObject reportModel) {
+            return GetReportDefaultFilename(ConvertReportID(reportModel), ConvertReportOutputFormat(reportModel));
+        }
         public static string GetReportDefaultFilename(ReportID reportID, OutputFormat outputFormat) {
             string timeStamp = DateTime.Now.ToString("dd-MM-yy_hh-ss");
 
             return reportID.GetReportDefaultFilename() + "_" + timeStamp + GetFileExtensionForOutputFormat(outputFormat);
         }
+
         public static string GetFileExtensionForOutputFormat(OutputFormat outputFormat) {
             if (outputFormat == OutputFormat.PDF)
                 return ".pdf";
@@ -28,8 +35,14 @@ namespace TemplatedReportGenerator
                 throw new ArgumentException("Output format not supported");
         }
 
-        private static string GetCredentialFilePath() {
-            return Directory.GetCurrentDirectory() + "/pdftools-api-credentials.json";
+        public static string GetTemplateFileDirectory(ReportID reportID, string reportTemplateDirectory = null) {
+            if (string.IsNullOrWhiteSpace(reportTemplateDirectory))
+                reportTemplateDirectory = $"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}{TemplateDirectoryName}";
+
+            string templateFilename = StaticReportMetadata.GetReportTemplateFilename(reportID);
+            string absoluteTemplateFilePath = $"{reportTemplateDirectory}{Path.DirectorySeparatorChar}{templateFilename}";
+
+            return absoluteTemplateFilePath;
         }
 
         public static ReportID ConvertReportID(JObject jsonModel) {
@@ -73,31 +86,42 @@ namespace TemplatedReportGenerator
         ///<exception cref="Adobe.DocumentServices.PDFTools.exception.ServiceApiException">Thrown when the API key is invalid. The API key for this toolkit expires yearly and needs to be refreshed on that basis.</exception>
         ///<param name="model">A data transfer model representing all information needed by the corresponding templated report. Only models from the TemplatedReportGenerator.ReportModel namespace are supported, other models will throw an exception.</param>
         ///<param name="outputFormat">The output format of the generated report. Adobe's generation toolkit supports both PDF and DOCX</param>
-        public static FileRef GenerateReport<T>(T model) where T : ReportBaseModel {
+        public static FileRef GenerateReport<T>(T model, string templateDirectoryFilepath = null) 
+            where T : ReportBaseModel 
+        {
             JObject jsonModel = JObject.FromObject(model);
 
-            return GenerateReport(jsonModel);
+            return GenerateReport(jsonModel, templateDirectoryFilepath);
         }
     
-        public static FileRef GenerateReport(JObject jsonModel) {
+        public static FileRef GenerateReport(JObject jsonModel, string templateDirectoryFilepath = null) {
             ReportID reportID = ConvertReportID(jsonModel);
             OutputFormat outputFormat = ConvertReportOutputFormat(jsonModel);
             
-            Credentials credentials = Credentials.ServiceAccountCredentialsBuilder()
-                                        .FromFile(GetCredentialFilePath())
-                                        .Build();
+            Credentials credentials = AdobeCredentials.GetAdobeCredentials();
             
             ExecutionContext executionContext = ExecutionContext.Create(credentials);
 
             DocumentMergeOptions documentMergeOptions = new DocumentMergeOptions(jsonModel, outputFormat);
             
             DocumentMergeOperation documentMergeOperation = DocumentMergeOperation.CreateNew(documentMergeOptions);
-            string templateFilePath = StaticReportMetadata.GetReportFilepath(reportID);
-            documentMergeOperation.SetInput(FileRef.CreateFromLocalFile(templateFilePath));
+            string absoluteTemplateFilePath = GetTemplateFileDirectory(reportID, templateDirectoryFilepath);
+            documentMergeOperation.SetInput(FileRef.CreateFromLocalFile(absoluteTemplateFilePath));
 
             FileRef result = documentMergeOperation.Execute(executionContext);
 
             return result;
+        }
+    
+        public static byte[] ToByteArray(this FileRef fileRef) {
+            byte[] byteResult;
+
+            using(MemoryStream outputStream = new MemoryStream()) {
+                fileRef.SaveAs(outputStream);
+                byteResult = outputStream.ToArray();
+            }
+
+            return byteResult;
         }
     }
 }
