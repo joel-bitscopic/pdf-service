@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace TemplatedReportGenerator.Model
+namespace com.bitscopic.reportcore.models
 {
     public class InhibitorResistanceResultsModel<T> {
         public string Name { get; set; }

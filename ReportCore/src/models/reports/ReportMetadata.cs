@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using TemplatedReportGenerator.Model;
 
-namespace TemplatedReportGenerator.ReportModel {
+namespace com.bitscopic.reportcore.models {
     //this DTO and static class should be easy to convert to a database driven approach. the enum represents the primary key and the remaining fields represent columns
     public class ReportMetadata {
         public string Name { get; set; }

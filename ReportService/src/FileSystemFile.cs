@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace com.bitscopic.src
+namespace com.bitscopic.reportservice.src
 {
     [Serializable]
     public class FileSystemFile

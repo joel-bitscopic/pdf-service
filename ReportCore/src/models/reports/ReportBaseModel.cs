@@ -1,7 +1,6 @@
 using System;
-using TemplatedReportGenerator.Model;
 
-namespace TemplatedReportGenerator.ReportModel
+namespace com.bitscopic.reportcore.models
 {
     public abstract class ReportBaseModel {
         public ReportID ReportID { get; set; }

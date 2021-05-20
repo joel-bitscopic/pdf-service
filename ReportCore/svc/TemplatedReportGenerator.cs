@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.IO;
 
 using Newtonsoft.Json.Linq;
@@ -10,10 +9,9 @@ using Adobe.DocumentServices.PDFTools.options.documentmerge;
 using Adobe.DocumentServices.PDFTools.pdfops;
 using Adobe.DocumentServices.PDFTools.io;
 
-using TemplatedReportGenerator.ReportModel;
-using System.Reflection;
+using com.bitscopic.reportcore.models;
 
-namespace TemplatedReportGenerator
+namespace com.bitscopic.reportcore.svc
 {
     public static class TemplatedReportGenerator {
         public const string TemplateDirectoryName = "resources";

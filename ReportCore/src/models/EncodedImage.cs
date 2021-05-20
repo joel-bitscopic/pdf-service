@@ -1,4 +1,4 @@
-namespace TemplatedReportGenerator.Model
+namespace com.bitscopic.reportcore.models
 {
     public class EncodedImage {
         public string Image { get; set; }

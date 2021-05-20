@@ -1,6 +1,4 @@
-using TemplatedReportGenerator.Model;
-
-namespace TemplatedReportGenerator.ReportModel
+namespace com.bitscopic.reportcore.models
 {
     public class HIVINResistanceReportModel : ReportBaseModel {
         public PatientModel Patient { get; set; }

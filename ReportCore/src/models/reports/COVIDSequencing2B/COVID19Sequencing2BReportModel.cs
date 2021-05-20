@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 
-using TemplatedReportGenerator.Model;
-
-namespace TemplatedReportGenerator.ReportModel
+namespace com.bitscopic.reportcore.models
 {
     public class COVID19Sequencing2BReportModel : ReportBaseModel 
     {

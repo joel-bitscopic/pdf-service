@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-using Adobe.DocumentServices.PDFTools.options.documentmerge;
 using Newtonsoft.Json.Linq;
-using TemplatedReportGenerator.Model;
-using TemplatedReportGenerator.ReportModel;
 
-namespace TemplatedReportGenerator.utils {
+using com.bitscopic.reportcore.models;
+using com.bitscopic.reportcore.svc;
+
+namespace com.bitscopic.reportcore.utils {
     static class PlaceholderReportUtilities {
         public static HIVINResistanceReportModel GenerateFakeHCVINModel() {
             var encodedHeaderImage = ReportID.HIVINResistance.GetReportHeaderImage();

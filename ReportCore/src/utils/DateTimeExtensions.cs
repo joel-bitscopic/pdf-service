@@ -1,6 +1,6 @@
 using System;
 
-namespace TemplatedReportGenerator
+namespace com.bitscopic.reportcore.utils
 {
     static class DateTimeExtensions {
         public static string ToReportDate(this DateTime dateTime, bool includeTime) {

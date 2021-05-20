@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 
-using TemplatedReportGenerator.Model;
+using com.bitscopic.reportcore.utils;
 
-namespace TemplatedReportGenerator.ReportModel
+namespace com.bitscopic.reportcore.models
 {
     public class PHRLChargebackInvoiceReportModel : ReportBaseModel {
         public IList<PHRLInvoiceModel> Invoices { get; set; }

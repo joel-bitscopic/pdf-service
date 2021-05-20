@@ -1,7 +1,7 @@
 using System;
-using TemplatedReportGenerator;
+using com.bitscopic.reportcore.utils;
 
-namespace TemplatedReportGenerator.Model
+namespace com.bitscopic.reportcore.models
 {
     public class PatientModel {
         public string Name { get; set; }

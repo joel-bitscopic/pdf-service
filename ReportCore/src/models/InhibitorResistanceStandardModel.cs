@@ -1,4 +1,4 @@
-namespace TemplatedReportGenerator.Model
+namespace com.bitscopic.reportcore.models
 {
     public class InhibitorResistanceStandardModel {
         public string DrugName { get; set; }

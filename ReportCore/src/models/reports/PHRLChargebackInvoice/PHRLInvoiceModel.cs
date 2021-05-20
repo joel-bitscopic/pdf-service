@@ -1,6 +1,8 @@
 using System;
 
-namespace TemplatedReportGenerator.Model
+using com.bitscopic.reportcore.utils;
+
+namespace com.bitscopic.reportcore.models
 {
     public class PHRLInvoiceModel {
         public string PHRLNumber { get; set; }

@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
-using TemplatedReportGenerator.utils;
+using com.bitscopic.reportcore.utils;
 
-namespace TemplatedReportGenerator
+namespace com.bitscopic.reportcore
 {
     class Program
     {

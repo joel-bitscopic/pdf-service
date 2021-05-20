@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace TemplatedReportGenerator.ReportModel {
+namespace com.bitscopic.reportcore.models {
     public enum ReportID {
         HIVINResistance,
         HCVResistance,

@@ -9,10 +9,10 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-using TemplatedReportGenerator;
-using com.bitscopic.src;
+using com.bitscopic.reportcore.svc;
+using com.bitscopic.reportservice.src;
 
-namespace com.bitscopic.svc
+namespace com.bitscopic.reportservice.svc
 {
     [ApiController]
     [Route("svc")]
@@ -22,11 +22,11 @@ namespace com.bitscopic.svc
 
         private string GetReportTemplateDirectory() {
             string reportServiceName = Assembly.GetExecutingAssembly().GetName().Name;
-            string reportCoreName = typeof(TemplatedReportGenerator.TemplatedReportGenerator).Assembly.GetName().Name;
+            string reportCoreName = typeof(TemplatedReportGenerator).Assembly.GetName().Name;
 
             string assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             string parentDirectoryPath = assemblyPath.Substring(0, assemblyPath.IndexOf(reportServiceName));
-            string reportTemplateDirectory = $"{parentDirectoryPath}{reportCoreName}{Path.DirectorySeparatorChar}{TemplatedReportGenerator.TemplatedReportGenerator.TemplateDirectoryName}";
+            string reportTemplateDirectory = $"{parentDirectoryPath}{reportCoreName}{Path.DirectorySeparatorChar}{TemplatedReportGenerator.TemplateDirectoryName}";
 
             return reportTemplateDirectory;
         }
@@ -43,17 +43,17 @@ namespace com.bitscopic.svc
                 JObject model = JObject.Parse(strModel);
 
                 string reportTemplatePath = GetReportTemplateDirectory();
-                byte[] reportBytes = TemplatedReportGenerator.TemplatedReportGenerator.GenerateReport(model, reportTemplatePath).ToByteArray();
+                byte[] reportBytes = TemplatedReportGenerator.GenerateReport(model, reportTemplatePath).ToByteArray();
 
-                FileSystemFile reportDTO = new FileSystemFile(TemplatedReportGenerator.TemplatedReportGenerator.GetReportDefaultFilename(model), reportBytes);
+                FileSystemFile reportDTO = new FileSystemFile(TemplatedReportGenerator.GetReportDefaultFilename(model), reportBytes);
 
                 return JsonConvert.SerializeObject(reportDTO);
             }
             catch (JsonReaderException jsonException) {
-                return JsonConvert.SerializeObject(new RequestFault(jsonException.Message, HttpStatusCode.BadRequest.ToString(), jsonException.InnerException));
+                return JsonConvert.SerializeObject(new RequestFault(jsonException.Message, ((int)HttpStatusCode.BadRequest).ToString(), jsonException.InnerException));
             }
             catch (Exception e) {
-                return JsonConvert.SerializeObject(new RequestFault(e.Message, HttpStatusCode.InternalServerError.ToString(), e.InnerException));
+                return JsonConvert.SerializeObject(new RequestFault(e.Message, ((int)HttpStatusCode.InternalServerError).ToString(), e.InnerException));
             }
         }
     }
