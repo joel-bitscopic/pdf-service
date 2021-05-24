@@ -8,7 +8,7 @@ using com.bitscopic.reportcore.models;
 using com.bitscopic.reportcore.svc;
 
 namespace com.bitscopic.reportcore.utils {
-    static class PlaceholderReportUtilities {
+    public static class PlaceholderReportUtilities {
         public static HIVINResistanceReportModel GenerateFakeHCVINModel() {
             var encodedHeaderImage = ReportID.HIVINResistance.GetReportHeaderImage();
 
@@ -135,14 +135,14 @@ namespace com.bitscopic.reportcore.utils {
             var pdfResult = TemplatedReportGenerator.GenerateReport(reportModel);
 
             var outputFormat = TemplatedReportGenerator.ConvertReportOutputFormat(reportModel);
-            pdfResult.SaveAs(TemplatedReportGenerator.GetCurrentDirectoryByExecutingAssembly() + "/output/" + TemplatedReportGenerator.GetReportDefaultFilename(reportModel.ReportID, outputFormat));
+            pdfResult.SaveAs(ReportCoreDirectory.GetReportCoreDirectory() + "/output/" + TemplatedReportGenerator.GetReportDefaultFilename(reportModel.ReportID, outputFormat));
         }
         public static void GenerateFakeReport(JObject jsonModel) {
             var pdfResult = TemplatedReportGenerator.GenerateReport(jsonModel);
             
             var outputFormat = TemplatedReportGenerator.ConvertReportOutputFormat(jsonModel);
             var reportID = TemplatedReportGenerator.ConvertReportID(jsonModel);
-            pdfResult.SaveAs(TemplatedReportGenerator.GetCurrentDirectoryByExecutingAssembly() + "/output/" + TemplatedReportGenerator.GetReportDefaultFilename(reportID, outputFormat));
+            pdfResult.SaveAs(ReportCoreDirectory.GetReportCoreDirectory() + "/output/" + TemplatedReportGenerator.GetReportDefaultFilename(reportID, outputFormat));
         }
     }
 }

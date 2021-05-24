@@ -1,7 +1,6 @@
 using System;
 using System.Net;
 using System.IO;
-using System.Reflection;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -10,6 +9,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 using com.bitscopic.reportcore.svc;
+using com.bitscopic.reportcore.utils;
 using com.bitscopic.reportservice.src;
 
 namespace com.bitscopic.reportservice.svc
@@ -19,17 +19,6 @@ namespace com.bitscopic.reportservice.svc
     public class ReportServiceController : ControllerBase
     {
         private readonly ILogger<ReportServiceController> _logger;
-
-        private string getReportTemplateDirectory() {
-            string reportServiceName = Assembly.GetExecutingAssembly().GetName().Name;
-            string reportCoreName = typeof(TemplatedReportGenerator).Assembly.GetName().Name;
-
-            string assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            string parentDirectoryPath = assemblyPath.Substring(0, assemblyPath.IndexOf(reportServiceName));
-            string reportTemplateDirectory = $"{parentDirectoryPath}{reportCoreName}{Path.DirectorySeparatorChar}{TemplatedReportGenerator.TemplateDirectoryName}";
-
-            return reportTemplateDirectory;
-        }
 
         private void useDefaultHeaderImageWhenEmpty(JObject model) {
             if (!model.ContainsKey("HeaderImage"))
@@ -51,7 +40,7 @@ namespace com.bitscopic.reportservice.svc
         ///<summary>
         ///Generate a PDF or MSWord report from a supported model. The template used will be inferred by the model's ReportID property and the resulting report format will be determined by the model's OutputFormat. The model should be supplied inside the request's body as stringified json.
         ///</summary>
-        ///<remarks>The request body should contain a single stringified json model. All quotation marks inside the json model should be properly escaped. One easy way to generate a valid json model is to use the ReportCore's strongly typed models and then converting them to stringified json for the request.</remarks>
+        ///<remarks>The request body should contain a single stringified json model. All quotation marks inside the json model should be properly escaped. One easy way to generate a valid json model is to use the ReportCore's strongly typed models and then convert them to stringified json for the request.</remarks>
         ///<returns>
         ///If the request is valid, a stringified json object representing a FileSystemFile will be returned. This will include the report as a byte array, a default filename for the report and other metadata about the byte array. If the request is invalid, a stringified json object representing a RequestFault will be returned containing information about the exception.
         ///</returns>
@@ -64,7 +53,7 @@ namespace com.bitscopic.reportservice.svc
                 useDefaultHeaderImageWhenEmpty(model);
                 useDefaultOutputTypeWhenEmpty(model);
 
-                string reportTemplatePath = getReportTemplateDirectory();
+                string reportTemplatePath = ReportCoreDirectory.GetReportTemplateDirectory();
                 byte[] reportBytes = TemplatedReportGenerator.GenerateReport(model, reportTemplatePath).ToByteArray();
 
                 FileSystemFile reportDTO = new FileSystemFile(TemplatedReportGenerator.GetReportDefaultFilename(model), reportBytes);
