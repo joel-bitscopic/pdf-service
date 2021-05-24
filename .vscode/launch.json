@@ -5,10 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": ".NET Core Launch (web)",
+            "name": "ReportService (web api)",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build",
+            "preLaunchTask": "build-service",
             "program": "${workspaceFolder}/ReportService/bin/Debug/net5.0/ReportService.dll",
             "args": ["${auto-detect-url}/swagger"],
             "cwd": "${workspaceFolder}/ReportService",
@@ -23,6 +23,22 @@
             "sourceFileMap": {
                 "/Views": "${workspaceFolder}/Views"
             }
+        },
+        {
+            // Use IntelliSense to find out which attributes exist for C# debugging
+            // Use hover for the description of the existing attributes
+            // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
+            "name": "ReportCore (console)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build-core",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/ReportCore/bin/Debug/net5.0/ReportCore.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
+            "console": "internalConsole",
+            "stopAtEntry": false
         },
         {
             "name": ".NET Core Attach",

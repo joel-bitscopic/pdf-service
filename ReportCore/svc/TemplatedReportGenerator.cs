@@ -10,6 +10,7 @@ using Adobe.DocumentServices.PDFTools.pdfops;
 using Adobe.DocumentServices.PDFTools.io;
 
 using com.bitscopic.reportcore.models;
+using System.Reflection;
 
 namespace com.bitscopic.reportcore.svc
 {
@@ -33,9 +34,18 @@ namespace com.bitscopic.reportcore.svc
                 throw new ArgumentException("Output format not supported");
         }
 
+        public static string GetCurrentDirectoryByExecutingAssembly() {
+            var assembly = Assembly.GetExecutingAssembly();
+                var assemblyLocation = assembly.Location;
+                var assemblyName = assembly.GetName().Name;
+                var projectDirectory = assemblyLocation.Substring(0, assemblyLocation.IndexOf(assemblyName) + assemblyName.Length);
+
+                return $"{projectDirectory}{Path.DirectorySeparatorChar}";
+        }
+
         public static string GetTemplateFileDirectory(ReportID reportID, string reportTemplateDirectory = null) {
             if (string.IsNullOrWhiteSpace(reportTemplateDirectory))
-                reportTemplateDirectory = $"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}{TemplateDirectoryName}";
+                reportTemplateDirectory = $"{GetCurrentDirectoryByExecutingAssembly()}{TemplateDirectoryName}";
 
             string templateFilename = StaticReportMetadata.GetReportTemplateFilename(reportID);
             string absoluteTemplateFilePath = $"{reportTemplateDirectory}{Path.DirectorySeparatorChar}{templateFilename}";

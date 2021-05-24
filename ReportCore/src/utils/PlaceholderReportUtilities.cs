@@ -135,14 +135,14 @@ namespace com.bitscopic.reportcore.utils {
             var pdfResult = TemplatedReportGenerator.GenerateReport(reportModel);
 
             var outputFormat = TemplatedReportGenerator.ConvertReportOutputFormat(reportModel);
-            pdfResult.SaveAs(Directory.GetCurrentDirectory() + "/output/" + TemplatedReportGenerator.GetReportDefaultFilename(reportModel.ReportID, outputFormat));
+            pdfResult.SaveAs(TemplatedReportGenerator.GetCurrentDirectoryByExecutingAssembly() + "/output/" + TemplatedReportGenerator.GetReportDefaultFilename(reportModel.ReportID, outputFormat));
         }
         public static void GenerateFakeReport(JObject jsonModel) {
             var pdfResult = TemplatedReportGenerator.GenerateReport(jsonModel);
             
             var outputFormat = TemplatedReportGenerator.ConvertReportOutputFormat(jsonModel);
             var reportID = TemplatedReportGenerator.ConvertReportID(jsonModel);
-            pdfResult.SaveAs(Directory.GetCurrentDirectory() + "/output/" + TemplatedReportGenerator.GetReportDefaultFilename(reportID, outputFormat));
+            pdfResult.SaveAs(TemplatedReportGenerator.GetCurrentDirectoryByExecutingAssembly() + "/output/" + TemplatedReportGenerator.GetReportDefaultFilename(reportID, outputFormat));
         }
     }
 }

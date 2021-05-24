@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ReportService</name>
+    </assembly>
+    <members>
+        <member name="M:com.bitscopic.reportservice.src.BitscopicBaseException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            This constructor is required to deserialize this custom exception properly. Any new properties should be added
+            </summary>
+            <param name="info"></param>
+            <param name="context"></param>
+        </member>
+        <member name="M:com.bitscopic.reportservice.src.BitscopicBaseException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            This method is required to serialize the custom properties of the exception. New properties should be added here to ensure they are included in serialization
+            </summary>
+            <param name="info"></param>
+            <param name="context"></param>
+        </member>
+        <member name="M:com.bitscopic.reportservice.svc.ReportServiceController.post(System.String)">
+            <summary>
+            Generate a PDF or MSWord report from a supported model. The template used will be inferred by the model's ReportID property and the resulting report format will be determined by the model's OutputFormat. The model should be supplied inside the request's body as stringified json.
+            </summary>
+            <remarks>The request body should contain a single stringified json model. All quotation marks inside the json model should be properly escaped. One easy way to generate a valid json model is to use the ReportCore's strongly typed models and then converting them to stringified json for the request.</remarks>
+            <returns>
+            If the request is valid, a stringified json object representing a FileSystemFile will be returned. This will include the report as a byte array, a default filename for the report and other metadata about the byte array. If the request is invalid, a stringified json object representing a RequestFault will be returned containing information about the exception.
+            </returns>
+        </member>
+    </members>
+</doc>
