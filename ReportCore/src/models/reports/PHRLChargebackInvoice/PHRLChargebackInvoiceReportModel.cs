@@ -5,7 +5,7 @@ using com.bitscopic.reportcore.utils;
 
 namespace com.bitscopic.reportcore.models
 {
-    public class PHRLChargebackInvoiceReportModel : ReportBaseModel {
+    public class PHRLChargebackInvoiceReportModel : ReportDynamicModel {
         public IList<PHRLInvoiceModel> Invoices { get; set; }
 
         public string Site { get; set; }

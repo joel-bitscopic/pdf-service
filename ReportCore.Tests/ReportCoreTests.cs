@@ -11,7 +11,7 @@ using Newtonsoft.Json.Linq;
 
 namespace com.bitscopic.reportcore.tests
 {
-    public class ReportGeneratorTests
+    public class ReportCoreTests
     {
         public void assertReportID(ReportBaseModel reportModel, ReportID reportID) {
             Assert.Equal(reportModel.ReportID, reportID);
@@ -81,31 +81,5 @@ namespace com.bitscopic.reportcore.tests
 
             Assert.ThrowsAny<Exception>(() => TemplatedReportGenerator.GenerateReport(invalidModel));
         }
-
-        //TemplatedReportGenerator.GenerateReport is not deterministic and while reports seem to be consistent visually, they almost always seem to have different byte code
-        /*
-        [Fact]
-        public void testTypedReportConsistency() 
-        {
-            var hcvin = PlaceholderReportUtilities.GenerateFakeHCVINModel();
-            
-            var result1 = TemplatedReportGenerator.GenerateReport(hcvin).ToByteArray();
-            var result2 = TemplatedReportGenerator.GenerateReport(hcvin).ToByteArray();
-
-            Assert.True(result1.SequenceEqual(result2));
-        }
-        
-        [Fact]
-        public void testConvertedReportConsistency()
-        {
-            var hcvin = PlaceholderReportUtilities.GenerateFakeHCVINModel();
-            var jsonHCVIN = JObject.FromObject(hcvin);
-            
-            var result1 = TemplatedReportGenerator.GenerateReport(hcvin).ToByteArray();
-            var result2 = TemplatedReportGenerator.GenerateReport(jsonHCVIN).ToByteArray();
-
-            Assert.True(result1.SequenceEqual(result2));
-        }
-        */
     }
 }

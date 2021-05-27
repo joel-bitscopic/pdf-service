@@ -81,9 +81,7 @@ namespace com.bitscopic.reportcore.utils {
 
             return reportModel;
         }
-        public static COVID19Sequencing2BReportModel GenerateFakeCOVID19SequencingModel() {
-            var encodedHeaderImage = ReportID.COVIDSequencing2B.GetReportHeaderImage();
-            
+        public static COVID19Sequencing2BReportModel GenerateFakeCOVID19SequencingModel() {           
             var patientModel = new COVID19Sequencing2BPatientModel("Max");
             patientModel.DateOfBirth = new DateTime(1991, 7, 17);
             patientModel.CollectionDate = new DateTime(2021, 5, 5, 10, 30, 0);
@@ -115,16 +113,12 @@ namespace com.bitscopic.reportcore.utils {
                 results.Add(fakeResult2);
             }
             
-            var reportModel = new COVID19Sequencing2BReportModel(encodedHeaderImage, patientModel, testModel, results);
+            var reportModel = new COVID19Sequencing2BReportModel(patientModel, testModel, results);
             reportModel.ResultSummary = "POSITIVE: VARIANT OF INTEREST B.1.526 DETECTED";
             reportModel.NextClade = "20C";
             reportModel.PangoLineage = "B.1.526";
             reportModel.Interpretation = "The SARS-CoV-2 variant of interest B.1.526 has the following characterized amino acid changes: Spike L5F, T95I, D253G, S477N, E484K, D614G, ORF1a L3201P, T265I, Δ3675-3677, ORF1b P314L, Q1011H, ORF3a Q57H, ORF8 T11I, and 5’UTR R81C. These changes are present in this specimen. This variant was first detected in New York in November 2020, and is predicted to have potentially reduced neutralization by monoclonal antibody treatments, convalescent and post-vaccination sera.";
             reportModel.Comments = "The sequence also contains the N variants A119S, R203K, G204R, and M234I, which are all characteristic of the P.2 variant of interest. Further investigation may be warranted. Whole SARS-CoV-2 genome analyzed (30 Kb). Coverage: 99.3%; Sequencing depth: 1,022.";
-            reportModel.Footer = "Mark Holodniy, MD, FACP, Director, VHA Public Health Reference Laboratory, 3801 Miranda Avenue (132), Palo Alto, CA 94304, V21PHRL@va.gov, CLIA# 05D2125891";
-            reportModel.SuperscriptAContent = "This test uses next generation sequencing to determine the consensus nucleotide and resulting amino acid sequence of SARS-CoV-2 compared to a reference sequence. The FDA has not approved or cleared this test; however, FDA clearance or approval is not currently required for public health use. Interpretations of CDC variants of concern and interest are drawn from updated guidance of the CDC website (https://www.cdc.gov/coronavirus/2019-ncov/cases-updates/variant-surveillance/variant-info.html). Results were analyzed with the Pangolin lineage assignment application (https://cov-lineages.org/pangolin.html) and Nextclade assignment and mutation calling application (https://clades.nextstrain.org). The results are not intended to be used as the sole means for clinical diagnosis or patient management decisions.";
-            reportModel.SuperscriptBContent = "Human Genome Variation Society nomenclature.";
-            reportModel.SuperscriptCContent = "https://www.biorxiv.org/content/10.1101/2021.03.24.436620v1.full https://www.biorxiv.org/content/10.1101/2021.02.14.431043v2.full";
 
             return reportModel;
         }

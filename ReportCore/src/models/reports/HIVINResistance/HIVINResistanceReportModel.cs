@@ -1,6 +1,6 @@
 namespace com.bitscopic.reportcore.models
 {
-    public class HIVINResistanceReportModel : ReportBaseModel {
+    public class HIVINResistanceReportModel : ReportDynamicModel {
         public PatientModel Patient { get; set; }
         public HIVINResistanceTestModel ResistanceTest { get; set; }
         public InhibitorResistanceResultsModel<InhibitorResistanceStandardModel> ResultSet { get; set; }

@@ -46,6 +46,9 @@ namespace com.bitscopic.reportcore.svc
         }
 
         public static ReportID ConvertReportID(JObject jsonModel) {
+            if (!jsonModel.ContainsKey("ReportID"))
+                throw new ArgumentNullException("ReportID must be defined inside json model");
+            
             //attempt to support passing integer ID associated with ReportID enum or string name associated with enum
             string strReportID = ((JToken)jsonModel["ReportID"]).Value<string>();
             int intReportID;

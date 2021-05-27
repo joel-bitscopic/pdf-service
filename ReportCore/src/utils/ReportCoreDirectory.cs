@@ -6,11 +6,26 @@ using com.bitscopic.reportcore.svc;
 namespace com.bitscopic.reportcore.utils {
     public static class ReportCoreDirectory {
         public static string GetReportCoreDirectory() {
-            string executingAssemblyName = Assembly.GetExecutingAssembly().GetName().Name;
-            string reportCoreName = typeof(TemplatedReportGenerator).Assembly.GetName().Name;
+            Assembly entryAssembly = Assembly.GetEntryAssembly();
+            string entryAssemblyName = entryAssembly.GetName().Name;
+            string entryassemblyPath = Path.GetDirectoryName(entryAssembly.Location);
+            
+            string parentDirectoryPath;
 
-            string assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            string parentDirectoryPath = assemblyPath.Substring(0, assemblyPath.IndexOf(executingAssemblyName));
+            if (entryassemblyPath.IndexOf(entryAssemblyName) == -1) {
+                Assembly executingAssembly = Assembly.GetExecutingAssembly();
+                string executingAssemblyName = executingAssembly.GetName().Name;
+                string executingAssemblyPath = Path.GetDirectoryName(executingAssembly.Location);
+
+                if (executingAssemblyPath.IndexOf(executingAssemblyName) == -1)
+                    throw new DirectoryNotFoundException("Could not dynamically locate ReportCore's directory based off of assembly information");
+                else
+                    parentDirectoryPath = executingAssemblyPath.Substring(0, executingAssemblyPath.IndexOf(executingAssemblyName));
+            }
+            else
+                parentDirectoryPath = entryassemblyPath.Substring(0, entryassemblyPath.IndexOf(entryAssemblyName));
+
+            string reportCoreName = typeof(TemplatedReportGenerator).Assembly.GetName().Name;
             string reportCoreDirectory = $"{parentDirectoryPath}{reportCoreName}";
 
             return reportCoreDirectory;
