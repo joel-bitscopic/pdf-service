@@ -19,7 +19,6 @@ namespace com.bitscopic.reportcore
 }
 
 //TODOs
-//sln file
 //HCV Resistance, HIVPRRT Resistance
 //refactor 
     //camel case property and method names
@@ -28,4 +27,4 @@ namespace com.bitscopic.reportcore
     //explore open source, care about input template + model and output quality
 //follow up on general direction for how reports are created (template responsibility vs language responsibility)
     //language responsibility means duplicate abstractions for 4 languages, template responsibility means duplicate abstractions for all template varieties
-    //if going model heavy - abstract access to DB with metadata for templates
+    //if going language responsibility will also need to abstract access to DB with metadata for templates
