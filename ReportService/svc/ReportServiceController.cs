@@ -63,7 +63,8 @@ namespace com.bitscopic.reportservice.svc
 
                 FileSystemFile reportDTO = new FileSystemFile(TemplatedReportGenerator.GetReportDefaultFilename(model), reportBytes);
 
-                System.IO.File.WriteAllBytes($"{Directory.GetCurrentDirectory()}/output/{reportDTO.fileName}", reportDTO.data);
+                //useful for debugging
+                //System.IO.File.WriteAllBytes($"{Directory.GetCurrentDirectory()}/output/{reportDTO.fileName}", reportDTO.data);
             
                 return JsonConvert.SerializeObject(reportDTO);
             }
